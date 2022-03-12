@@ -8,17 +8,17 @@ class Circle {
         this.radius = Math.random() * 25 + 1;
         this.x = x;
         if(this.x-this.radius<0){
-            this.x = this.radius;
+            this.x = this.radius+1;
         }
         if(this.x+this.radius>innerWidth){
-            this.x = innerWidth-this.radius;
+            this.x = innerWidth-this.radius-1;
         }
         this.y = y;
         if(this.y-this.radius<0){
-            this.y = this.radius;
+            this.y = this.radius+1;
         }
         if(this.y+this.radius>innerHeight){
-            this.y = innerHeight-this.radius;
+            this.y = innerHeight-this.radius-1;
         }
         this.stroke = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
         this.fill = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
