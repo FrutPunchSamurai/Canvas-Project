@@ -3,15 +3,6 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 var ctx = canvas.getContext('2d');
 
-// class Hitbox {
-//     constructor(up, down, left, right) {
-//         this.up = up;
-//         this.down = down;
-//         this.left = left;
-//         this.right = right;
-//     }
-// }
-
 class Circle {
     constructor(x, y) {
         this.radius = Math.random() * 25 + 1;
@@ -33,7 +24,12 @@ class Circle {
         this.fill = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
         this.xVelocity = (Math.random() - 0.5) * 10;
         this.yVelocity = (Math.random() - 0.5) * 10;
-        //const hitbox = new Hitbox(this.y - this.radius, this.y + this.radius, this.x - this.radius, this.x + this.radius);
+        this.hitbox = {
+            up: this.y - this.radius,
+            down: this.y + this.radius,
+            left: this.x - this.radius,
+            right: this.x + this.radius,
+        };
     }
 
     draw() {
@@ -45,25 +41,43 @@ class Circle {
         ctx.fill();
     }
 
-    update() {
-        this.draw();
-        if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
+    updateHitbox(){
+        this.hitbox = {
+            up: this.y - this.radius,
+            down: this.y + this.radius,
+            left: this.x - this.radius,
+            right: this.x + this.radius,
+        };
+    }
+
+    updateVelocity() {
+        if (this.hitbox.right > innerWidth || this.hitbox.left < 0) {
             this.xVelocity = -this.xVelocity;
         }
-        if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
+        if (this.hitbox.down > innerHeight || this.hitbox.up < 0) {
             this.yVelocity = -this.yVelocity;
         }
+    }
+
+    updateDirection(){
         this.x += this.xVelocity;
         this.y += this.yVelocity;
+    }
+
+    updateAll() {
+        this.updateHitbox();
+        this.updateVelocity();
+        this.updateDirection();
+    }
+
+    animate(){
+        this.draw();
+        this.updateAll();
     }
 
 }
 
 const circle_array = [];
-
-// for (var i = 0; i < 750; i++) {
-//     circle_array.push(new Circle());
-// }
 
 canvas.addEventListener('click', function (e) {
     circle_array.push(new Circle(e.clientX, e.clientY));
@@ -73,7 +87,7 @@ function animate() {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, innerWidth, innerHeight);
     for (var i = 0; i < circle_array.length; i++) {
-        circle_array[i].update();
+        circle_array[i].animate();
     }
 }
 
