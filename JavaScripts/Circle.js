@@ -1,24 +1,21 @@
-var canvas = document.querySelector('canvas');
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-var ctx = canvas.getContext('2d');
+import { canvas , ctx } from "./script.js";
 
-class Circle {
+export default class Circle {
     constructor(x, y) {
         this.radius = Math.random() * 25 + 1;
         this.x = x;
-        if(this.x-this.radius<0){
-            this.x = this.radius+1;
+        if (this.x - this.radius < 0) {
+            this.x = this.radius + 1;
         }
-        if(this.x+this.radius>innerWidth){
-            this.x = innerWidth-this.radius-1;
+        if (this.x + this.radius > innerWidth) {
+            this.x = innerWidth - this.radius - 1;
         }
         this.y = y;
-        if(this.y-this.radius<0){
-            this.y = this.radius+1;
+        if (this.y - this.radius < 0) {
+            this.y = this.radius + 1;
         }
-        if(this.y+this.radius>innerHeight){
-            this.y = innerHeight-this.radius-1;
+        if (this.y + this.radius > innerHeight) {
+            this.y = innerHeight - this.radius - 1;
         }
         this.stroke = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
         this.fill = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
@@ -41,12 +38,12 @@ class Circle {
         ctx.fill();
     }
 
-    updateHitbox(){
+    updateHitbox() {
         this.hitbox = {
-            up: this.y - this.radius,
-            down: this.y + this.radius,
-            left: this.x - this.radius,
-            right: this.x + this.radius,
+        up: this.y - this.radius,
+        down: this.y + this.radius,
+        left: this.x - this.radius,
+        right: this.x + this.radius,
         };
     }
 
@@ -59,7 +56,7 @@ class Circle {
         }
     }
 
-    updateDirection(){
+    updateDirection() {
         this.x += this.xVelocity;
         this.y += this.yVelocity;
     }
@@ -70,26 +67,8 @@ class Circle {
         this.updateDirection();
     }
 
-    animate(){
+    animate() {
         this.draw();
         this.updateAll();
     }
-
 }
-
-const circle_array = [];
-
-canvas.addEventListener('click', function (e) {
-    circle_array.push(new Circle(e.clientX, e.clientY));
-});
-
-function animate() {
-    requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-    for (var i = 0; i < circle_array.length; i++) {
-        circle_array[i].animate();
-    }
-}
-
-animate();
-
