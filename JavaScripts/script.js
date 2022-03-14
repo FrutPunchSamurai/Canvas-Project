@@ -9,6 +9,15 @@ const circle_array = [];
 
 //updating mouse position and hitbox
 document.addEventListener("mousemove",function(e){
+    if(e.clientX == 0 || e.clientX == innerWidth-1 || e.clientY == 0 || e.clientY == innerHeight-1){
+        Mouse.position.x = undefined;
+        Mouse.position.y = undefined;
+        Mouse.hitbox.up = undefined;
+        Mouse.hitbox.down = undefined;
+        Mouse.hitbox.left = undefined;
+        Mouse.hitbox.right = undefined;
+        return;
+    }
     Mouse.position.x = e.clientX;
     Mouse.position.y = e.clientY;
     Mouse.hitbox.up = Mouse.position.y - Mouse.radius;

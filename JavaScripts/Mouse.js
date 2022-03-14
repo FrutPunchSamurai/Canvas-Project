@@ -1,6 +1,6 @@
 var Mouse;
 export default Mouse = {
-    radius: 30,
+    radius: 10,
     position: {
         x: undefined,
         y: undefined,
@@ -12,6 +12,10 @@ export default Mouse = {
         right: undefined
     },
     draw_hitbox: function(canvas){
+        if(this.position.x == undefined){
+            canvas.clearRect(0,0,innerWidth,innerHeight);
+            return;
+        }
         canvas.beginPath();
         canvas.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, false);
         canvas.strokeStyle = 'black';
