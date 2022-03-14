@@ -1,8 +1,13 @@
-import { canvas , ctx } from "./script.js";
+import { canvas, ctx } from "./script.js";
+import { acceleration_due_to_gravity} from "./Constants.js";
+import { compareHitbox } from "./Functions.js";
+import Mouse from "./Mouse.js";
 
 export default class Circle {
     constructor(x, y) {
-        this.radius = Math.random() * 25 + 1;
+        this.maxRadius = 75;
+        this.radius = Math.random() * 25 + 10;
+        this.minRadius = this.radius;
         this.x = x;
         if (this.x - this.radius < 0) {
             this.x = this.radius + 1;
@@ -19,8 +24,8 @@ export default class Circle {
         }
         this.stroke = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
         this.fill = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
-        this.xVelocity = (Math.random() - 0.5) * 10;
-        this.yVelocity = (Math.random() - 0.5) * 10;
+        this.xVelocity = 0;
+        this.yVelocity = 0;
         this.hitbox = {
             up: this.y - this.radius,
             down: this.y + this.radius,
@@ -38,12 +43,17 @@ export default class Circle {
         ctx.fill();
     }
 
+    updatePosition() {
+        this.x += this.xVelocity;
+        this.y += this.yVelocity;
+    }
+
     updateHitbox() {
         this.hitbox = {
-        up: this.y - this.radius,
-        down: this.y + this.radius,
-        left: this.x - this.radius,
-        right: this.x + this.radius,
+            up: this.y - this.radius,
+            down: this.y + this.radius,
+            left: this.x - this.radius,
+            right: this.x + this.radius,
         };
     }
 
@@ -53,18 +63,28 @@ export default class Circle {
         }
         if (this.hitbox.down > innerHeight || this.hitbox.up < 0) {
             this.yVelocity = -this.yVelocity;
+        } 
+        else {
+            this.yVelocity += 0.5;
+        }
+
+    }
+
+    mouseInteraction(){
+        if(compareHitbox(this.hitbox,Mouse.hitbox)){
+            console.log("Colliding");
+        }
+        else{
+            console.log("Not colliding");
         }
     }
 
-    updateDirection() {
-        this.x += this.xVelocity;
-        this.y += this.yVelocity;
-    }
 
     updateAll() {
         this.updateHitbox();
         this.updateVelocity();
-        this.updateDirection();
+        this.updatePosition();
+        this.mouseInteraction();
     }
 
     animate() {
